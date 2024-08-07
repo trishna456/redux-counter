@@ -1,9 +1,10 @@
 import { createStore } from 'redux';
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, configureStore } from '@reduxjs/toolkit';
 
 const initialState = { counter: 0, showCounter: true };
 
-createSlice({
+const counterSlice = createSlice({
+  //for dispatching actions - automatically creates unique action identifiers for our different reducers
   name: 'counter',
   initialState,
   reducers: {
@@ -22,17 +23,14 @@ createSlice({
   },
 });
 
+/*
 const counterReducer = (state = initialState, action) => {
   if (action.type === 'increment') {
-    state.counter++;
-    return state;
-
-    /*
+   
     return {
       counter: state.counter + 1,
       showCounter: state.showCounter,
     };
-    */
   }
 
   if (action.type === 'increase') {
@@ -58,7 +56,15 @@ const counterReducer = (state = initialState, action) => {
 
   return state;
 };
+*/
 
-const store = createStore(counterReducer);
+// const store = createStore(counterReducer); or createStore(counterSlice.reducer) and to combine multiple reducers using standard redux use combineReducers()
+
+const store = configureStore({
+  //behind the scene, configureStore will merge all the reducers into one big reducer
+  reducer: counterSlice.reducer,
+});
+
+export const conunterActions = counterSlice.actions;
 
 export default store;
